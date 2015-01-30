@@ -31,7 +31,7 @@ public class Minesweeper extends JFrame {
         board = new SweeperPanel[width][height];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                SweeperPanel spot = new SweeperPanel(30, i, j);
+                SweeperPanel spot = new SweeperPanel(20, i, j);
                 board[i][j] = spot;
                 getContentPane().add(spot);
             }
