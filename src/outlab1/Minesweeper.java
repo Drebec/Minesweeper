@@ -51,7 +51,7 @@ public class Minesweeper extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public static SweeperPanel[][] getBoard() {
+    public static SweeperPanel[][] returnBoard() {
         return board;
     }
 

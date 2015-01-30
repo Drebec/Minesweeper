@@ -67,13 +67,21 @@ public class SweeperPanel extends JPanel {
     public void setNumMines(String s) {
         numMines = s;
     }
+    
+    public SweeperPanel[][] getBoard() {
+        return Minesweeper.returnBoard();
+    }
+    
+    public SweeperPanel getBoard(int i, int j) {
+        return Minesweeper.returnBoard()[i][j];
+    }
 
     public void lose() {
-        for (int i = 0; i < Minesweeper.getBoard().length; i++) {
-            for (int j = 0; j < Minesweeper.getBoard()[i].length; j++) {
-                if (Minesweeper.getBoard()[i][j].getMine()) {
-                    Minesweeper.getBoard()[i][j].setClicked();
-                    Minesweeper.getBoard()[i][j].repaint();
+        for (int i = 0; i < getBoard().length; i++) {
+            for (int j = 0; j < getBoard()[i].length; j++) {
+                if (getBoard(i, j).getMine()) {
+                    getBoard(i, j).setClicked();
+                    getBoard(i, j).repaint();
                 }
             }
         }
@@ -82,18 +90,18 @@ public class SweeperPanel extends JPanel {
     }
 
     public boolean win() {
-        for (int i = 0; i < Minesweeper.getBoard().length; i++) {
-            for (int j = 0; j < Minesweeper.getBoard()[i].length; j++) {
-                if (!Minesweeper.getBoard()[i][j].getClicked() && !Minesweeper.getBoard()[i][j].getMine()) {
+        for (int i = 0; i < getBoard().length; i++) {
+            for (int j = 0; j < getBoard()[i].length; j++) {
+                if (!getBoard(i, j).getClicked() && !getBoard(i, j).getMine()) {
                     return false;
                 }
             }
         }
-        for (int i = 0; i < Minesweeper.getBoard().length; i++) {
-            for (int j = 0; j < Minesweeper.getBoard()[i].length; j++) {
-                if (Minesweeper.getBoard()[i][j].getMine()) {
-                    Minesweeper.getBoard()[i][j].setFlagged();
-                    Minesweeper.getBoard()[i][j].repaint();
+        for (int i = 0; i < getBoard().length; i++) {
+            for (int j = 0; j < getBoard()[i].length; j++) {
+                if (getBoard(i, j).getMine()) {
+                    getBoard(i, j).setFlagged();
+                    getBoard(i, j).repaint();
                 }
             }
         }
@@ -103,14 +111,14 @@ public class SweeperPanel extends JPanel {
     public void flood(int a, int b) {
         for (int i = (a - 1); i <= (a + 1); i++) {
             for (int j = (b - 1); j <= (b + 1); j++) {
-                if (i >= 0 && i < Minesweeper.getBoard().length && j >= 0 && j < Minesweeper.getBoard()[0].length) {
-                    if (Minesweeper.getBoard()[i][j].numMines.equals("0") && !Minesweeper.getBoard()[i][j].clicked) {
-                        Minesweeper.getBoard()[i][j].setClicked();
-                        Minesweeper.getBoard()[i][j].repaint();
-                        Minesweeper.getBoard()[i][j].flood(i, j);
+                if (i >= 0 && i < getBoard().length && j >= 0 && j < getBoard()[0].length) {
+                    if (getBoard(i, j).numMines.equals("0") && !getBoard(i, j).clicked) {
+                        getBoard(i, j).setClicked();
+                        getBoard(i, j).repaint();
+                        getBoard(i, j).flood(i, j);
                     } else {
-                        Minesweeper.getBoard()[i][j].setClicked();
-                        Minesweeper.getBoard()[i][j].repaint();
+                        getBoard(i, j).setClicked();
+                        getBoard(i, j).repaint();
                     }
                 }
             }
