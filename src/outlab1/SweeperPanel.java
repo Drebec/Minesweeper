@@ -13,6 +13,7 @@ import javax.swing.SwingUtilities;
 /**
  *
  * @author Drew
+ * 
  */
 public class SweeperPanel extends JPanel {
 
@@ -119,7 +120,7 @@ public class SweeperPanel extends JPanel {
     @Override
     public void paint(Graphics g) {
         if (flagged) {
-            Font f = new Font("Times", Font.PLAIN, 40);
+            Font f = new Font("Times", Font.PLAIN, 30);
             g.setFont(f);
             FontMetrics fm = g.getFontMetrics();
             int a = fm.getAscent();
@@ -139,7 +140,7 @@ public class SweeperPanel extends JPanel {
                 g.drawRect(0, 0, size, size);
             } else {
                 if (!numMines.equals("0")) {
-                    Font f = new Font("Times", Font.PLAIN, 40);
+                    Font f = new Font("Times", Font.PLAIN, 30);
                     g.setFont(f);
                     FontMetrics fm = g.getFontMetrics();
                     int a = fm.getAscent();
