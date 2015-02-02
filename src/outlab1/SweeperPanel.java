@@ -13,14 +13,16 @@ import javax.swing.SwingUtilities;
 /**
  *
  * @author Drew
- * 
+ *
  */
 public class SweeperPanel extends JPanel {
 
+    //instance variables
     private boolean mine, flagged, clicked;
     private int size, x, y;
     private String numMines;
 
+    //constructor
     public SweeperPanel(int size, int x, int y) {
         this.size = size;
         this.x = x;
@@ -29,14 +31,18 @@ public class SweeperPanel extends JPanel {
         clicked = false;
         setLayout(new BorderLayout());
 
+        //set dimensions
         Dimension dims = new Dimension(size, size);
         setPreferredSize(dims);
         setMaximumSize(dims);
         setMinimumSize(dims);
 
+        //add mouse listener
         addMouseListener(new MSMouseListener());
+        //create a random number
         int rand = (int) (Math.random() * 8);
 
+        //spots have a one in seven chance of being a mine
         if (rand == 0) {
             mine = true;
         } else {
@@ -44,6 +50,7 @@ public class SweeperPanel extends JPanel {
         }
     }
 
+    //get and set methods
     public boolean getMine() {
         return mine;
     }
@@ -67,15 +74,16 @@ public class SweeperPanel extends JPanel {
     public void setNumMines(String s) {
         numMines = s;
     }
-    
+
     public SweeperPanel[][] getBoard() {
         return Minesweeper.returnBoard();
     }
-    
+
     public SweeperPanel getBoard(int i, int j) {
         return Minesweeper.returnBoard()[i][j];
     }
 
+    //lose method reveals all mines on the board and tells the user they lost
     public void lose() {
         for (int i = 0; i < getBoard().length; i++) {
             for (int j = 0; j < getBoard()[i].length; j++) {
@@ -89,6 +97,7 @@ public class SweeperPanel extends JPanel {
         System.exit(0);
     }
 
+    //win method flags all unflagged mines and tells the user they won
     public boolean win() {
         for (int i = 0; i < getBoard().length; i++) {
             for (int j = 0; j < getBoard()[i].length; j++) {
@@ -108,6 +117,9 @@ public class SweeperPanel extends JPanel {
         return true;
     }
 
+    //flood method checks the 8 spots surrounding the last clicked spot
+    //if the spot has no mines around it it clicks that spot, repaints it, then calls flood on that spot
+    //otherwise it clicks the spot and repaints it
     public void flood(int a, int b) {
         for (int i = (a - 1); i <= (a + 1); i++) {
             for (int j = (b - 1); j <= (b + 1); j++) {
@@ -127,6 +139,7 @@ public class SweeperPanel extends JPanel {
 
     @Override
     public void paint(Graphics g) {
+        //print the "F" over flagged spots
         if (flagged) {
             Font f = new Font("Times", Font.PLAIN, 30);
             g.setFont(f);
@@ -141,12 +154,14 @@ public class SweeperPanel extends JPanel {
             g.setColor(Color.WHITE);
             g.drawString("F", size / 2 - fl / 2, size / 2 + a - h / 2);
         } else if (clicked) {
+            //make the mines spots solid red squares
             if (mine) {
                 g.setColor(Color.RED);
                 g.fillRect(0, 0, size, size);
                 g.setColor(Color.BLACK);
                 g.drawRect(0, 0, size, size);
             } else {
+                //if the spot has mines around it print the number in a specific color
                 if (!numMines.equals("0")) {
                     Font f = new Font("Times", Font.PLAIN, 30);
                     g.setFont(f);
@@ -158,14 +173,14 @@ public class SweeperPanel extends JPanel {
                     g.setColor(Color.BLACK);
                     g.drawRect(0, 0, size, size);
                     int w = fm.stringWidth(numMines);
-                    switch(numMines) {
+                    switch (numMines) {
                         case "1":
                             g.setColor(Color.BLACK);
                             break;
                         case "2":
                             g.setColor(Color.BLUE);
                             break;
-                        case"3":
+                        case "3":
                             g.setColor(Color.RED);
                             break;
                         case "4":
@@ -186,7 +201,8 @@ public class SweeperPanel extends JPanel {
                         default:
                             break;
                     }
-                    g.drawString(numMines, size / 2 - w / 2, size / 2 + a - h / 2);                    
+                    g.drawString(numMines, size / 2 - w / 2, size / 2 + a - h / 2);
+                    //if the spot has no mines around it leave it blank
                 } else {
                     g.setColor(Color.WHITE);
                     g.fillRect(0, 0, size, size);
@@ -194,6 +210,7 @@ public class SweeperPanel extends JPanel {
                     g.drawRect(0, 0, size, size);
                 }
             }
+            //if the spot was not clicked or flagged print the normal color
         } else {
             g.setColor(new Color(170, 171, 167));
             g.fillRect(1, 1, size - 2, size - 2);
@@ -226,24 +243,30 @@ public class SweeperPanel extends JPanel {
 
         @Override
         public void mouseClicked(MouseEvent e) {
+            //on right click
             if (SwingUtilities.isRightMouseButton(e)) {
+                //if unflagged and unclicked, flag
                 if (!flagged && !clicked) {
                     flagged = true;
+                    //if flagged, unflag
                 } else if (flagged) {
                     flagged = false;
-                } else {
+                    //on left click
                 }
             } else if (SwingUtilities.isLeftMouseButton(e)) {
+                //if unflagged and unclicked, click
                 if (!flagged && !clicked) {
                     clicked = true;
                     repaint();
+                    //if the spot was a mine run the lose method
                     if (mine) {
                         lose();
+                        //if the spot had no mines around it flood
                     } else if (numMines.equals("0")) {
                         flood(x, y);
                     }
-                } else {
                 }
+                //if the player won, tell them and close the game
                 if (win()) {
                     JOptionPane.showMessageDialog(null, "You Win!");
                     System.exit(0);
